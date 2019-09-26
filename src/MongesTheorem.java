@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tooltip;
 import javafx.scene.Cursor;
@@ -12,10 +13,11 @@ import javafx.scene.Scene;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class MongesTheorem extends Application {
 	private double deltaX;
 	private double deltaY;
 	private double lastX;
@@ -158,11 +160,9 @@ public class Main extends Application {
 		
 		circle3.setOnMouseEntered(e -> circle3.setCursor(Cursor.HAND));
 		
-		Pane paneMain = new Pane(circle1, circle2, circle3, line1, line2, line3, line4, line5, line6, line7, point1, point2, point3);
-		
-		slider1.valueProperty().addListener(new ChangeListener() {
+		slider1.valueProperty().addListener(new ChangeListener<Object>() {
 			@Override
-            public void changed(ObservableValue o, Object oldVal, Object newVal) {
+            public void changed(ObservableValue<?> o, Object oldVal, Object newVal) {
 				if(Math.sqrt(Math.pow(circle2.getCenterX() - circle1.getCenterX(), 2) + Math.pow(circle2.getCenterY() - circle1.getCenterY(), 2)) > circle1.getRadius() + circle2.getRadius() + 5 || Math.sqrt(Math.pow(circle3.getCenterX() - circle1.getCenterX(), 2) + Math.pow(circle3.getCenterY() - circle1.getCenterY(), 2)) > circle1.getRadius() + circle3.getRadius() + 5) {
 					lastR = circle1.getRadius();
 				}
@@ -177,9 +177,9 @@ public class Main extends Application {
 			}
 		});
 		
-		slider2.valueProperty().addListener(new ChangeListener() {
+		slider2.valueProperty().addListener(new ChangeListener<Object>() {
 			@Override
-            public void changed(ObservableValue o, Object oldVal, Object newVal) {
+            public void changed(ObservableValue<?> o, Object oldVal, Object newVal) {
 				if(Math.sqrt(Math.pow(circle1.getCenterX() - circle2.getCenterX(), 2) + Math.pow(circle1.getCenterY() - circle2.getCenterY(), 2)) > circle2.getRadius() + circle1.getRadius() + 5 || Math.sqrt(Math.pow(circle3.getCenterX() - circle2.getCenterX(), 2) + Math.pow(circle3.getCenterY() - circle2.getCenterY(), 2)) > circle2.getRadius() + circle3.getRadius() + 5) {
 					lastR = circle2.getRadius();
 				}
@@ -194,9 +194,9 @@ public class Main extends Application {
 			}
 		});
 		
-		slider3.valueProperty().addListener(new ChangeListener() {
+		slider3.valueProperty().addListener(new ChangeListener<Object>() {
 			@Override
-            public void changed(ObservableValue o, Object oldVal, Object newVal) {
+            public void changed(ObservableValue<?> o, Object oldVal, Object newVal) {
 				if(Math.sqrt(Math.pow(circle1.getCenterX() - circle3.getCenterX(), 2) + Math.pow(circle1.getCenterY() - circle3.getCenterY(), 2)) > circle3.getRadius() + circle1.getRadius() + 5 || Math.sqrt(Math.pow(circle2.getCenterX() - circle3.getCenterX(), 2) + Math.pow(circle2.getCenterY() - circle3.getCenterY(), 2)) > circle3.getRadius() + circle2.getRadius() + 5) {
 					lastR = circle3.getRadius();
 				}
@@ -213,6 +213,13 @@ public class Main extends Application {
 		
 		HBox hBoxSliders = new HBox(slider1, slider2, slider3);
 		
+		Label watermarkLabel = new Label("Created by Robert D. Rioja");
+		watermarkLabel.setFont(Font.font("Verdana", 20));
+		watermarkLabel.setLayoutX(5);
+		watermarkLabel.setStyle("-fx-background-color: white;");
+		
+		Pane paneMain = new Pane(circle1, circle2, circle3, line1, line2, line3, line4, line5, line6, line7, point1, point2, point3, watermarkLabel);
+		
 		VBox vBoxMain = new VBox(hBoxSliders, paneMain);
 		
 		Rectangle rectangleClip = new Rectangle();
@@ -224,7 +231,9 @@ public class Main extends Application {
 		
 		Scene scene = new Scene(vBoxMain);
 		
-		primaryStage.setTitle("Monge's Theorem in Java by Robert Rioja");
+		watermarkLabel.layoutYProperty().bind(scene.heightProperty().subtract(40));
+		
+		primaryStage.setTitle("Monge's Theorem");
         primaryStage.setScene(scene);
 		primaryStage.setMaximized(true);
 		
